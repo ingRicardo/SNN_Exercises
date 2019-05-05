@@ -33,5 +33,11 @@ for i=1:No_steps
 end
 
 clf % clear the graphics
-plot(times, V);
-
+subplot(2,1,1)
+plot(times, V, 'r');
+Vheight = 1.2 .* Rm .* I_0;
+axis([0 duration 0 Vheight])
+subplot(2,1,2)
+plot(times, Iinj, 'b');
+Iheight = 1.2 .* I_0;
+axis([0 duration 0 Iheight])
