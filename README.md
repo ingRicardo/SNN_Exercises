@@ -2,3 +2,6 @@
 SNN_Exercises
 
 -Leaky Integrate and Fire (LIF) model neurons
+
+-The Postsynaptic Potential – PSP
+
