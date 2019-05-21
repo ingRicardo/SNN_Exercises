@@ -5,3 +5,5 @@ SNN_Exercises
 
 -The Postsynaptic Potential – PSP
 
+-data vector normalizarion [0,1]
+
