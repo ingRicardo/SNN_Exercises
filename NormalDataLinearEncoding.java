@@ -20,14 +20,20 @@ public class NormalDataLinearEncoding {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		double [] v = new double[] {75.0,-21.0,-11.0,95.0,55.0,33.0,-54.2,92.5,5.2,8.6};
-		System.out.print("input -> ");
-		for (int j=0; j < v.length; j++) {
-			System.out.print(v[j]+",");
-		}
-		System.out.println("");
-		double[] normdata = normalize(v);		
 		double rho=0.1;
 		int maxd=10;	
+		DelaysOutput(v, rho, maxd);
+		
+	}
+	
+	public static double [] DelaysOutput(double [] input, double rho, int maxd ) {
+		System.out.print("input -> ");
+		for (int j=0; j < input.length; j++) {
+			System.out.print(input[j]+",");
+		}
+		System.out.println("");
+		double[] normdata = normalize(input);		
+	
 		System.out.println("Output normal -> ");				
 		for (int j=0; j < normdata.length; j++) {
 			System.out.print(normdata[j]+",");												
@@ -37,7 +43,7 @@ public class NormalDataLinearEncoding {
 		for (int j=0; j < delays.length; j++) {
 			System.out.print(delays[j]+",");												
 		}
-		
+		return delays;
 	}
 	
 	public static double [] delays (double [] normal, double rho, int maxd) {
