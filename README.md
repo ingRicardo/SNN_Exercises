@@ -7,3 +7,6 @@ SNN_Exercises
 
 -data vector normalizarion [0,1]
 
+-Temporal Encoding - Linear encoding
+
+
