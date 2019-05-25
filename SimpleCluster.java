@@ -5,6 +5,7 @@ package testing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Ricardo Alfredo Macias Olvera
@@ -17,9 +18,12 @@ public class SimpleCluster {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+		Random r = new Random();
 		double[][] data = {{75.0,-21.0,-11.0,95.0,55.0,33.0,-54.2,92.5,5.2,8.6},
-						   {-25.0,81.0,61.0,-65.7,35.8,-43.5,94.2,52.5,-3.9,6.2}};
+						   {-25.0,81.0,61.0,-65.7,35.8,-43.5,94.2,52.5,-3.9,6.2},
+						   {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
+				   		   {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())}
+						   };
 		
 		double [] input = new double[data[0].length];
 		double [] delays = null;
@@ -52,10 +56,20 @@ public class SimpleCluster {
 			for (int i=0; i<deldaycen.length; i++) {
 				deldaycen[i] =1;
 			}
-			 delcent.add(deldaycen);			
-			double[][] testingData = {{-25.0,-41.0,-81.0,10.3,35.0,53.0,-34.2,12.5,8.2,6.6},
-					   					{45.0,71.0,-61.0,75.8,-55.5,23.5,84.2,-72.5,5.9,-66.2}};
+			 delcent.add(deldaycen);
+			 
+			 
+			 double randomValue = (-100 + (100 - (-100)) * r.nextDouble());
+			 System.out.println("random --> "+randomValue);
+			 
+			//double[][] testingData = {{-25.0,-41.0,-81.0,10.3,35.0,53.0,-34.2,12.5,8.2,6.6},
+				//	   					{45.0,71.0,-61.0,75.8,-55.5,23.5,84.2,-72.5,5.9,-66.2}};
 			
+			
+			double[][] testingData = {{(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
+									  {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
+									  {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
+									  {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())}};
 			
 			int fsize = testingData[0].length*testingData.length;
 			System.out.println("fsize -> "+ fsize);
@@ -74,12 +88,14 @@ public class SimpleCluster {
 				ones[i] =1;
 			}
 			delaysAug.add(ones);
+			
+
 			double [] wones = new double[w.length];
 			for (int i=0; i<w.length; i++) {
 				wones[i] =1;
 			}
 			
-			weights.add(wones);
+			weights.add(weights(1, 1));
 			System.out.println("\ndelaysAug -> "+ delaysAug);
 			System.out.println("\nweightsg -> "+ weights);
 			
