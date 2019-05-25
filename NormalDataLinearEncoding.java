@@ -27,7 +27,7 @@ public class NormalDataLinearEncoding {
 	}
 	
 	public static double [] DelaysOutput(double [] input, double rho, int maxd ) {
-		System.out.print("input -> ");
+		System.out.print("\ninput -> ");
 		for (int j=0; j < input.length; j++) {
 			System.out.print(input[j]+",");
 		}
