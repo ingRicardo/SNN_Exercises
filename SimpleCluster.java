@@ -160,9 +160,10 @@ public class SimpleCluster {
 			int n=0;
 			int [] tmp = new int[fdelays[0].length];
 			List<Object> arrn = new ArrayList<Object>();			
-				acu = 0;
-				out = new double[fweights[0].length];
+
 				while (t <= tmax) {
+					acu = 0;
+					out = new double[fweights[0].length];
 					arrn = new ArrayList<Object>();
 					for (int i = 0; i < fdelays.length; i++) {// inputs
 					//	System.out.println("");
