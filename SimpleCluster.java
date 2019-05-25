@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author TIJUANA
+ * @author Ricardo Alfredo Macias Olvera
  *
  */
 public class SimpleCluster {
@@ -27,7 +27,7 @@ public class SimpleCluster {
 		double[] w = null;
 		double rho=0.1;
 		int maxd=10;
-		int tra =4;
+		int tra =5;
 		int trb = (input.length/2) + tra;
 		List<double []> weights = new ArrayList<double []>();
 		List<double []> delcent = new ArrayList<double []>();
@@ -52,12 +52,13 @@ public class SimpleCluster {
 			for (int i=0; i<deldaycen.length; i++) {
 				deldaycen[i] =1;
 			}
-			 delcent.add(deldaycen);
-		//delaysCenters(tra, trb, delays, maxd, rho);
-			
+			 delcent.add(deldaycen);			
 			double[][] testingData = {{-25.0,-41.0,-81.0,10.3,35.0,53.0,-34.2,12.5,8.2,6.6},
 					   					{45.0,71.0,-61.0,75.8,-55.5,23.5,84.2,-72.5,5.9,-66.2}};
 			
+			
+			int fsize = testingData[0].length*testingData.length;
+			System.out.println("fsize -> "+ fsize);
 			System.out.println("-----testing------");
 			List<double []> delaysAug = new ArrayList<double []>();
 			for (int i=0; i< testingData.length; i++) { //inputs
@@ -88,9 +89,7 @@ public class SimpleCluster {
 				if (delaysAug.get(i) instanceof double[]) {
 					double [] delaysi = delaysAug.get(i); 
 					int c =0;
-				//	System.out.println("");
 					for (double d : delaysi) {
-					//	System.out.print(" "+d);
 						fdelays[i][c] = d;
 						c++;
 					}
@@ -112,10 +111,8 @@ public class SimpleCluster {
 			for (int i =0; i < weights.size(); i++) {
 				if (weights.get(i) instanceof double[]) {
 					double [] weightsi = weights.get(i); 
-					//System.out.println("");
 					int c =0;
 					for (double we : weightsi) {
-					//	System.out.print(" "+we);
 						fweights[i][c] = we;
 						c++;
 					}
@@ -130,17 +127,12 @@ public class SimpleCluster {
 				}
 			}
 			
-			
-			
-			
 			double [][] fdelcent= new double[delcent.size()][dc.length];
 			for (int i =0; i < delcent.size(); i++) {
 				if (delcent.get(i) instanceof double[]) {
 					double [] delcenti = delcent.get(i); 
-					//System.out.println("");
 					int c =0;
 					for (double delce : delcenti) {
-					//	System.out.print(" "+we);
 						fdelcent[i][c] = delce;
 						c++;
 					}
@@ -156,7 +148,7 @@ public class SimpleCluster {
 				}
 			}
 			
-			int tmax =30;
+			int tmax =12;
 			double t=0;
 			double dt=0;
 			double tau=1.84;
@@ -164,68 +156,90 @@ public class SimpleCluster {
 			System.out.println("");
 			double [] out = new double[fweights[0].length];
 			double acu =0;
-			double teta=2.04;
-		//	int total =0;
-			
+			double teta=2.04;		
 			int n=0;
-			for (int tamr =0; tamr < testingData.length; tamr++) {
-				System.out.println("");
-				for (int tamc =0; tamc < testingData[0].length; tamc++) {
-					
-						//	System.out.print(" "+fdelays[i][j] );
-			
-					//	n=0;
-			
-								while(t <= tmax){
-									out = new double[fweights[0].length];
-									for (int k=0; k<fweights[0].length; k++ ) { //output					
-										acu =0;
-										for (int i =0; i < fdelays.length; i++) {//inputs
-											
-											for (int j =0; j < fdelays[0].length; j++) {//values
-														dt = (t -fdelays[i][j]);
-					
-														sai = fweights[i][k] * ((dt-fdelcent[i][k])/tau) * Math.exp(1 - ((dt-fdelcent[i][k])/tau));
-					
-													if(sai<0)
-														sai=0;
-														
-													acu+=sai;
-											}
+			int [] tmp = new int[fdelays[0].length];
+			List<Object> arrn = new ArrayList<Object>();			
+				acu = 0;
+				out = new double[fweights[0].length];
+				while (t <= tmax) {
+					arrn = new ArrayList<Object>();
+					for (int i = 0; i < fdelays.length; i++) {// inputs
+					//	System.out.println("");
+						tmp = new int[fdelays[0].length];
+						for (int j = 0; j < fdelays[0].length; j++) {// values
+
+							dt = (t - fdelays[i][j]);
+
+							for (int k = 0; k < fweights[0].length; k++) { // output
+								sai = fweights[i][k] * ((dt - fdelcent[i][k]) / tau)
+										* Math.exp(1 - ((dt - fdelcent[i][k]) / tau));
+
+								if (sai < 0)
+									sai = 0;
+
+								acu += sai;
+								out[k] = acu;
+							}
+
+							double max = NormalDataLinearEncoding.mayData(out);
+
+							for (int jj = 0; jj < out.length; jj++) {
+
+								if ( (max >= teta) && (max == out[jj])) {
+
+									if (out[0] == out[1]) {
+										if (jj == 1) {
+											n = 0;
+											 tmp[i] = n;
 										}
-										out[k] = acu;
+									} else {
+										n = jj;
+										 tmp[i] = n;
 									}
-									System.out.println("");
-									double max = NormalDataLinearEncoding.mayData(out);	
-									
-									for (int j =0; j <out.length; j++) {
-										
-									     if (max!=0 && (max >=teta) && (max == out[j]) ) {
-									    
-									    		 if (out[0] == out[1]) {
-									    			 if(j==1) {
-									    				 n=0;
-									    			//	 total++;
-									    				 System.out.println("neu "+n + " " + out[j]);
-									    				break;
-									    			 }
-									    		 }else {
-									    			 n = j;
-									    		//	 total++;
-									    			 System.out.println("neu "+n + " " + out[j]);
-									    			 break;
-									    		 }				    		 
-									    	 				    		 
-									     }
-									}			
-									t+=rho;
+
 								}
-			
-							
-								System.out.println("n "+ n);
+							}
+
+						//	System.out.println(" "+ tmp[i]);
+							arrn.add(tmp[i]);
+						}
+
+					}
+					t += rho;
 				}
-			}	
-		//	System.out.println("total -> "+ total);
+				System.out.println("arrn "+ arrn);
+
+				List<Double> classZero = new ArrayList<Double>();
+				List<Double> classOne = new ArrayList<Double>();
+					int y =0;
+					for (int x = 0; x < testingData.length; x++) { // inputs
+						for (int x1 = 0; x1 < testingData[0].length; x1++) { // values
+							System.out.println(testingData[x][x1] +" -> "+ arrn.get(y));
+							y++;
+							if ((int) arrn.get(y) == 0)
+								classZero.add(testingData[x][x1]);
+								else if ((int) arrn.get(y) == 1)
+								classOne.add(testingData[x][x1]);
+							
+							if(y>fsize )
+								break;
+						}
+					}
+					
+					
+					System.out.println("\n class Zero values ");
+					
+					for (Double double1 : classZero) {
+						System.out.println(double1);
+					}
+					
+					
+					System.out.println("\n class One values ");
+					
+					for (Double double1 : classOne) {
+						System.out.println(double1);
+					}
 	}
 	
 	public static double[]  delaysCenters(int tra,int trb,double [] delays, int maxd, double rho) {
@@ -249,10 +263,8 @@ public class SimpleCluster {
 		
 		dc[0] = maxd - m1;
 		dc[1] = maxd - m2;
-		//dc[2] = 1;//maxd;
 		System.out.println("delay center m1 -> " + dc[0]);
 		System.out.println("delay center m2 -> " + dc[1]);
-	//	System.out.println("delay reference -> " + dc[2]);
 	
 		return dc;
 	}
