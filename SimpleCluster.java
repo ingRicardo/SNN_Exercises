@@ -26,12 +26,20 @@ public class SimpleCluster {
 						   };
 		
 		double [] input = new double[data[0].length];
+		 
 		double [] delays = null;
 		double[] dc = null;
 		double[] w = null;
+		double[][] WeigthIni = {{1.0,1.0},
+									 {1.0,1.0},
+									 {1.0,1.0},
+									 {1.0,1.0}};
+		double [] winput = new double[WeigthIni[0].length];
+		
 		double rho=0.1;
 		int maxd=10;
-		int tra =5;
+		int tra =4;
+		int output=2;
 		int trb = (input.length/2) + tra;
 		List<double []> weights = new ArrayList<double []>();
 		List<double []> delcent = new ArrayList<double []>();
@@ -44,11 +52,13 @@ public class SimpleCluster {
 				}
 				 delays = NormalDataLinearEncoding.DelaysOutput(input, rho, maxd);
 					//------training----
-				 dc = delaysCenters(tra, trb, delays, maxd, rho);
+				 dc = delaysCenters(output,tra, trb, delays, maxd, rho);
 				 delcent.add(dc);
+				 for (int j=0; j< WeigthIni[0].length; j++) {
+					 winput[j]=WeigthIni[i][j];
+				 }
 				 
-				 
-				 w = weights(1, 1);
+				 w = weights( winput);
 				 weights.add(w);
 			}
 		
@@ -95,7 +105,14 @@ public class SimpleCluster {
 				wones[i] =1;
 			}
 			
-			weights.add(weights(1, 1));
+ 			double [] onesw = new double[WeigthIni[0].length];
+			//for (int i = 0; i < WeigthIni.length; i++)
+				for(int j =0; j < WeigthIni[0].length;j++)
+					onesw[j] = 1;
+			
+				weights.add(weights(onesw));
+			
+			
 			System.out.println("\ndelaysAug -> "+ delaysAug);
 			System.out.println("\nweightsg -> "+ weights);
 			
@@ -167,7 +184,7 @@ public class SimpleCluster {
 			int tmax =12;
 			double t=0;
 			double dt=0;
-			double tau=1.84;
+			double tau=1.44;
 			double sai =0;
 			System.out.println("");
 			double [] out = new double[fweights[0].length];
@@ -259,14 +276,14 @@ public class SimpleCluster {
 					}
 	}
 	
-	public static double[]  delaysCenters(int tra,int trb,double [] delays, int maxd, double rho) {
+	public static double[]  delaysCenters(int size,int tra,int trb,double [] delays, int maxd, double rho) {
 		System.out.println("\n\n---delaysCenters---");
-		int m1 = 0, sum = 0, m2 = 0, sum2 = 0;
-		double[] dc = new double[2];
+	//	int m1 = 0, sum = 0, m2 = 0, sum2 = 0;
+		double[] dc = new double[size];
 		System.out.println("training data -> " + tra);
 		System.out.println("trb -> "+ trb);
 		
-		for (int i = 0; i < tra; i++)
+		/*for (int i = 0; i < tra; i++)
 			sum += delays[i];
 
 		for (int i = tra; i < trb; i++)
@@ -282,18 +299,36 @@ public class SimpleCluster {
 		dc[1] = maxd - m2;
 		System.out.println("delay center m1 -> " + dc[0]);
 		System.out.println("delay center m2 -> " + dc[1]);
+		*/
+		int sumX=0,mX=0;
+		for(int i=0; i< dc.length; i++) {
+			
+			for (int j = 0; j < tra; j++) {
+				sumX+=delays[j];	
+			}
+			mX = (int) (((sumX / tra) / rho) * rho);
+			
+			dc[i] = maxd-mX;
+			System.out.println("DELAY CENTER X -> "+ dc[i]);
+		}
 	
 		return dc;
 	}
 	
-	public static double[]  weights(double w1, double w2) {
+	public static double[]  weights(double[] val) {
 		System.out.println("-----weights-----");
-		double [] w = new double[2];
-		w[0] = w1;
+		double [] w = new double[val.length];
+		
+		for(int i=0; i< val.length;i++) {
+			w[i] = val[i];
+			System.out.println("weight X -> " + w[i]);
+		}
+			 
+		/*w[0] = w1;
 		w[1] = w2;	
 		System.out.println("weight 1 -> " + w[0]);
 		System.out.println("weight 2 -> " + w[1]);
-		
+		*/
 		return w;
 		
 	}
