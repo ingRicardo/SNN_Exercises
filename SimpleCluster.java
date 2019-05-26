@@ -4,6 +4,7 @@
 package testing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -19,8 +20,8 @@ public class SimpleCluster {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Random r = new Random();
-		double[][] data = {{75.0,-21.0,-11.0,95.0,55.0,33.0,-54.2,92.5,5.2,8.6},
-						   {-25.0,81.0,61.0,-65.7,35.8,-43.5,94.2,52.5,-3.9,6.2},
+		double[][] data = {{(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
+						   {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
 						   {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())},
 				   		   {(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble())}
 						   };
@@ -36,7 +37,7 @@ public class SimpleCluster {
 									 {1.0,1.0}};
 		double [] winput = new double[WeigthIni[0].length];
 		
-		double rho=0.1;
+		double rho=0.5;
 		int maxd=10;
 		int tra =4;
 		int output=2;
@@ -64,7 +65,7 @@ public class SimpleCluster {
 		
 			double [] deldaycen = new double[dc.length];
 			for (int i=0; i<deldaycen.length; i++) {
-				deldaycen[i] =1;
+				deldaycen[i] =10;
 			}
 			 delcent.add(deldaycen);
 			 
@@ -95,20 +96,15 @@ public class SimpleCluster {
 			}
 			double [] ones = new double[data[0].length];
 			for (int i=0; i<ones.length; i++) {
-				ones[i] =1;
+				ones[i] =10;
 			}
 			delaysAug.add(ones);
 			
 
-			double [] wones = new double[w.length];
-			for (int i=0; i<w.length; i++) {
-				wones[i] =1;
-			}
-			
  			double [] onesw = new double[WeigthIni[0].length];
-			//for (int i = 0; i < WeigthIni.length; i++)
+
 				for(int j =0; j < WeigthIni[0].length;j++)
-					onesw[j] = 1;
+					onesw[j] = 10;
 			
 				weights.add(weights(onesw));
 			
@@ -141,6 +137,8 @@ public class SimpleCluster {
 			}
 			System.out.println("\nweights");
 			double [][] fweights = new double[weights.size()][w.length];
+			
+			System.out.println("fweights --> XXXX "+ fweights.length +":"+ fweights[0].length);
 			for (int i =0; i < weights.size(); i++) {
 				if (weights.get(i) instanceof double[]) {
 					double [] weightsi = weights.get(i); 
@@ -181,25 +179,26 @@ public class SimpleCluster {
 				}
 			}
 			
-			int tmax =12;
+			int tmax =15;
 			double t=0;
 			double dt=0;
-			double tau=1.44;
+			double tau=1.84;
 			double sai =0;
 			System.out.println("");
 			double [] out = new double[fweights[0].length];
 			double acu =0;
 			double teta=2.04;		
-			int n=0;
 			int [] tmp = new int[fdelays[0].length];
 			List<Object> arrn = new ArrayList<Object>();			
 
 				while (t <= tmax) {
-					acu = 0;
-					out = new double[fweights[0].length];
+				
+					
 					arrn = new ArrayList<Object>();
 					for (int i = 0; i < fdelays.length; i++) {// inputs
 					//	System.out.println("");
+						acu = 0;
+						out = new double[fweights[0].length];
 						tmp = new int[fdelays[0].length];
 						for (int j = 0; j < fdelays[0].length; j++) {// values
 
@@ -217,25 +216,15 @@ public class SimpleCluster {
 							}
 
 							double max = NormalDataLinearEncoding.mayData(out);
-
+							//System.out.println("");
 							for (int jj = 0; jj < out.length; jj++) {
-
+						//		System.out.println(jj+" --> "+out[jj]);
 								if ( (max >= teta) && (max == out[jj])) {
 
-									if (out[0] == out[1]) {
-										if (jj == 1) {
-											n = 0;
-											 tmp[i] = n;
-										}
-									} else {
-										n = jj;
-										 tmp[i] = n;
-									}
-
+										 tmp[i] = jj;
 								}
 							}
 
-						//	System.out.println(" "+ tmp[i]);
 							arrn.add(tmp[i]);
 						}
 
@@ -244,62 +233,46 @@ public class SimpleCluster {
 				}
 				System.out.println("arrn "+ arrn);
 
-				List<Double> classZero = new ArrayList<Double>();
-				List<Double> classOne = new ArrayList<Double>();
-					int y =0;
-					for (int x = 0; x < testingData.length; x++) { // inputs
-						for (int x1 = 0; x1 < testingData[0].length; x1++) { // values
-							System.out.println(testingData[x][x1] +" -> "+ arrn.get(y));
-							y++;
-							if ((int) arrn.get(y) == 0)
-								classZero.add(testingData[x][x1]);
-								else if ((int) arrn.get(y) == 1)
-								classOne.add(testingData[x][x1]);
-							
-							if(y>fsize )
-								break;
+					List<Double> list = null;
+					int y;
+					HashMap<Object, Object> hasmap =  new HashMap<>();
+					for (int out1 = 0; out1< output; out1++) {
+						y=0;
+						list = new ArrayList<Double>();
+						for (int x = 0; x < testingData.length; x++) { // inputs
+							for (int x1 = 0; x1 < testingData[0].length; x1++) { // values
+								y++;
+								
+								if ((int) arrn.get(y) == out1) {
+									list.add(testingData[x][x1]);
+								}
+								
+								if(y>fsize )
+									break;
+								
+							}
 						}
+						hasmap.put(out1, list);
+					}
+					System.out.println("\n -- final values by classes ---");
+					for (int out1 = 0; out1< output; out1++) {
+						System.out.println(out1+" : "+hasmap.get(out1));
+						
 					}
 					
-					
-					System.out.println("\n class Zero values ");
-					
-					for (Double double1 : classZero) {
-						System.out.println(double1);
-					}
-					
-					
-					System.out.println("\n class One values ");
-					
-					for (Double double1 : classOne) {
-						System.out.println(double1);
-					}
+						
+						
+						
 	}
 	
 	public static double[]  delaysCenters(int size,int tra,int trb,double [] delays, int maxd, double rho) {
 		System.out.println("\n\n---delaysCenters---");
-	//	int m1 = 0, sum = 0, m2 = 0, sum2 = 0;
+
 		double[] dc = new double[size];
 		System.out.println("training data -> " + tra);
 		System.out.println("trb -> "+ trb);
 		
-		/*for (int i = 0; i < tra; i++)
-			sum += delays[i];
 
-		for (int i = tra; i < trb; i++)
-			sum2 += delays[i];
-
-		m1 = (int) (((sum / tra) / rho) * rho);
-		m2 = (int) (((sum2 / tra) / rho) * rho);
-
-		System.out.println("center 1 -> " + m1);
-		System.out.println("center 2 -> " + m2);
-		
-		dc[0] = maxd - m1;
-		dc[1] = maxd - m2;
-		System.out.println("delay center m1 -> " + dc[0]);
-		System.out.println("delay center m2 -> " + dc[1]);
-		*/
 		int sumX=0,mX=0;
 		for(int i=0; i< dc.length; i++) {
 			
@@ -324,11 +297,6 @@ public class SimpleCluster {
 			System.out.println("weight X -> " + w[i]);
 		}
 			 
-		/*w[0] = w1;
-		w[1] = w2;	
-		System.out.println("weight 1 -> " + w[0]);
-		System.out.println("weight 2 -> " + w[1]);
-		*/
 		return w;
 		
 	}
