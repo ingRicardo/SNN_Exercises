@@ -9,4 +9,6 @@ SNN_Exercises
 
 -Temporal Encoding - Linear encoding
 
+-Receptive Fields Encoding
+
 
