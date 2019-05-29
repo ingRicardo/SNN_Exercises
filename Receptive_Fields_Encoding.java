@@ -41,7 +41,7 @@ public class Receptive_Fields_Encoding {
 	}
 
 	public static double [][] receptive_fields(double [] input, int rf, double maxd, double[] sigma, double f_cut, double rho, int typ) {
-		
+		System.out.println("\n---- receptive fields ----\n");
 		double [] centers = new double[rf];
 		double [] normData = NormalDataLinearEncoding.normalize(input);
 		double cent_dist = 0;		
@@ -72,7 +72,7 @@ public class Receptive_Fields_Encoding {
 				for (int k =0 ; k <  centers.length; k++) {
 					aux = maxd -maxd * Math.exp(-1* Math.pow((normData[i]-centers[k]), 2)/(2*Math.pow(sigma[k], 2)));
 					
-					if (aux>(maxd*f_cut))
+					if (aux>(maxd*f_cut))// firing
 						aux=-1;
 					
 					delays[i][k]=aux;
