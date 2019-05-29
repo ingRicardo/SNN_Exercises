@@ -3,12 +3,14 @@
  */
 package testing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
  * @author TIJUANA
- *
+ * SRM -Cluster
  */
 public class Clustering {
 
@@ -46,10 +48,10 @@ public class Clustering {
 		int maxd=10;
 		
 		System.out.println("");
-		int[] d = new int[13];
+		double[] d = new double[13];
 		int ssin = d.length; 
 		for (int i = 0; i< d.length; i++) {
-			d[i] = i;
+			d[i] = 0 + ( (1 - (0)) * r.nextDouble()) ;
 			System.out.print(" "+d[i]+ ", ");
 		}
 		
@@ -67,90 +69,167 @@ public class Clustering {
 		//output
 		double [][] w = iniweights(rf, output, ssin, w_max, w_min); // initialize weights 
 		System.out.println("");
-		double[][] InputnormData =Receptive_Fields_Encoding.receptive_fields(input[0], rf, maxd, sigma, f_cut, rho, 0);// encoding inputs 
+		double[][] InputnormData =null;//Receptive_Fields_Encoding.receptive_fields(input[0], rf, maxd, sigma, f_cut, rho, 0);// encoding inputs 
 		
+		List<Object>  normDatalst = new ArrayList<>();
+		for (int i =0; i < input.length; i++) {
+			
+			InputnormData =Receptive_Fields_Encoding.receptive_fields(input[i], rf, maxd, sigma, f_cut, rho, 0);// encoding inputs
+			normDatalst.add(InputnormData);
+		}
 		
+		System.out.println("Normal data size --> "+ normDatalst.size());
 		//training
 		double [] delta_t = new double[ssin];
 		HashMap<Object, Object> neuTime = null;
 		int ctr =0;
-	while(ctr <= max_epoch)	{
-		for (int i=0; i < InputnormData.length; i++) {//8
+		while (ctr <= max_epoch) {
 			
-			System.out.println("");
-			 neuTime = calculate_firing(InputnormData[i], t_max, w, d, tau, rho, teta, 0);
-			 System.out.println("\nfiring Size -> "+neuTime.size());
-			 			
-			for (int j = 0; j < InputnormData[j].length; j++) { // 8
-				if (InputnormData[i][j] == -1.0) {
+			for (int fin = 0; fin < normDatalst.size(); fin++) {
 
-					for (int x = 0; x < w.length; x++) {//8 					
-						// System.out.println("");
-						for (int y = 0; y < w[0].length; y++) {//5
-							if (i == x && j == y && neuTime.containsKey(j)) { // modify j 
-								System.out.println("weight -> "+ w[x][y] + ", " + InputnormData[i][j] + ", ");
-								w[x][y] = w[x][y]-eta;
-								System.out.println("newWeight -> "+ w[x][y]);
-							}
-						}
-					} // x
-				} // -1
-				else {
-					
-					for (int x = 0; x < w.length; x++) {//8 					
-						// System.out.println("");
-						for (int y = 0; y < w[0].length; y++) {//5
-							if (i == x && j == y && neuTime.containsKey(j)) { // modify j 
-								System.out.println("weight -> "+ w[x][y] + ", " + InputnormData[i][j] + ", ");
-								
+				InputnormData = (double[][]) normDatalst.get(fin);
+				
+				for (int i = 0; i < InputnormData.length; i++) {// 8
 
-								for (int id =0; id < d.length; id ++) {
-									delta_t[id] = InputnormData[i][j] + d[i] - (double) neuTime.get(j);
-									w[x][y] = w[x][y]+eta  * ((1+beta)*Math.exp(-1*( Math.pow(delta_t[id]+2.3, 2)/(2*kapa-2) ))-beta);
-									
+					System.out.println("");
+					neuTime = calculate_firing(InputnormData[i], t_max, w, d, tau, rho, teta, 0);
+					System.out.println("\nfiring Size -> " + neuTime.size());
+
+					for (int j = 0; j < InputnormData[j].length; j++) { // 8
+						if (InputnormData[i][j] == -1.0) {
+
+							for (int x = 0; x < w.length; x++) {// 8
+								// System.out.println("");
+								for (int y = 0; y < w[0].length; y++) {// 5
+									if (i == x && j == y && neuTime.containsKey(j)) { // modify j
+										System.out.println("weight -> " + w[x][y] + ", " + InputnormData[i][j] + ", ");
+										w[x][y] = w[x][y] - eta;
+										System.out.println("newWeight -> " + w[x][y]);
+									}
 								}
-								System.out.println("else -> newWeight -> "+ w[x][y]);
+							} // x
+						} // -1
+						else {
+
+							for (int x = 0; x < w.length; x++) {// 8
+								// System.out.println("");
+								for (int y = 0; y < w[0].length; y++) {// 5
+									if (i == x && j == y && neuTime.containsKey(j)) { // modify j
+										System.out.println("weight -> " + w[x][y] + ", " + InputnormData[i][j] + ", ");
+
+										for (int id = 0; id < d.length; id++) {
+											delta_t[id] = InputnormData[i][j] + d[i] - (double) neuTime.get(j);
+											w[x][y] = w[x][y] + eta * ((1 + beta)
+													* Math.exp(-1 * (Math.pow(delta_t[id] + 2.3, 2) / (2 * kapa - 2)))
+													- beta);
+
+										}
+										System.out.println("else -> newWeight -> " + w[x][y]);
+									}
+
+								}
+							} // x
+
+						} // end else
+
+						for (int x = 0; x < w.length; x++) {// 8
+							// System.out.println("");
+							for (int y = 0; y < w[0].length; y++) {// 5
+								if (i == x && j == y && neuTime.containsKey(j)) { // modify j
+									if (w[x][y] < w_min) {
+										w[x][y] = w_min;
+										System.out.println("less than " + w_min + " weigth updated");
+									}
+
+									if (w[x][y] > w_max) {
+										w[x][y] = w_max;
+										System.out.println("more than " + w_max + " weigth updated");
+									}
+
+								}
 							}
-					
-						}
-					} // x
-					
-				}//end else
-				
-				for (int x = 0; x < w.length; x++) {//8 					
-					// System.out.println("");
-					for (int y = 0; y < w[0].length; y++) {//5
-						if (i == x && j == y && neuTime.containsKey(j)) { // modify j 
-							if (w[x][y]<w_min) {
-								w[x][y] = w_min;
-								System.out.println("less than "+w_min+" weigth updated");
-							}
-							
-							if (w[x][y]>w_max) {
-								w[x][y] = w_max;
-								System.out.println("more than "+w_max+" weigth updated");
-							}
-							
-						}
-					}
-				}
-				
-			}
+						}//weigth range validation [0,1]
+
+					}//data
+
+				}//rows
 		
-		}
-		ctr+=1;
-		teta = teta +(0.3*teta)/max_epoch;
-	}
-	
-	/*System.out.println("new weights --> ");
-		for (int x = 0; x < w.length; x++) {//8 					
-			System.out.println("");
-			for (int y = 0; y < w[0].length; y++) {//5
+			
+			}//array all data
+			ctr += 1;
+			teta = teta + (0.3 * teta) / max_epoch;
+		}//epochs
+		System.out.println("----- new weights ----");
+		for (int x = 0; x < w.length; x++) {// 8
+			 System.out.println("");
+			for (int y = 0; y < w[0].length; y++) {// 5
 				System.out.println(w[x][y]);
 			}
 		}
-	*/
-		//calculate_firing(InputnormData[0], t_max, w, d, tau, rho, teta, 0);
+		
+	
+	
+	double[][] inputTesting = 
+		{{(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+		(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+		(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+		(-100 + (100 - (-100)) * r.nextDouble())},
+			{(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+			(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+			(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+			(-100 + (100 - (-100)) * r.nextDouble())},
+			{(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+				(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+				(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
+				(-100 + (100 - (-100)) * r.nextDouble())}};
+	
+	System.out.println("--- testing ---");
+	double[][] InputnormDataTest =null;
+	List<Object>  normDataTest = new ArrayList<>();
+	for (int i =0; i < inputTesting.length; i++) {
+		
+		InputnormDataTest =Receptive_Fields_Encoding.receptive_fields(inputTesting[i], rf, maxd, sigma, f_cut, rho, 0);// encoding inputs
+		normDataTest.add(InputnormDataTest);
+	}
+	
+	
+	//	HashMap<Object, Object> fdata = new HashMap<>();
+		int k =0;
+		System.out.println("\n----classes----");
+	    List<Object> classes = new ArrayList<Object>();
+		for (int fin = 0; fin < normDataTest.size(); fin++) {//3
+
+			InputnormDataTest = (double[][]) normDataTest.get(fin);
+			System.out.println("");
+			for (int i = 0; i < InputnormDataTest.length; i++) {// 10
+			//	System.out.println("");
+				
+					neuTime = calculate_firing(InputnormDataTest[i], t_max, w, d, tau, rho, teta, 0);
+					//System.out.println("size -> " + neuTime.size());
+																
+							for ( Object key : neuTime.keySet() ) {								   
+								k=(int) key;					
+							}
+							classes.add(k);																					
+							System.out.print(k+", ");
+							
+			}
+
+		}
+
+		int ctrl=0;
+		HashMap<Object, Object> mapData= new HashMap<>();
+		for (int i = 0; i < inputTesting.length; i++) {//3
+			for (int j = 0; j < inputTesting[0].length; j++) {//3
+				mapData.put(inputTesting[i][j], classes.get(ctrl));
+				ctrl++;
+			}
+		}
+		System.out.println("\n mapData -> "+ mapData);
+		
+		
+		
+	//	System.out.println(fdata);
 	}
 	
 	public static double [][] iniweights(int rf, int output, int ssin, int w_max, int w_min) {//5 X 8
@@ -167,7 +246,7 @@ public class Clustering {
 		return w;
 	}
 	
-	public static HashMap<Object, Object> calculate_firing(double[] input, int t_max, double[][] w, int[] d, int tau, double rho, double teta, int typ ) {
+	public static HashMap<Object, Object> calculate_firing(double[] input, int t_max, double[][] w, double[] d, int tau, double rho, double teta, int typ ) {
 		//outputs  w-col  5
 		// number of values input- col  8
 		// sub-synapses d-length 13
@@ -176,7 +255,7 @@ public class Clustering {
 		
 		double t =0;
 		double dt =0,dtt=0, sai=0;
-		int n =0;
+	
 		double [] output = new double[w[0].length];
 		double acu =0;
 		double max=0;
