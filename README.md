@@ -11,4 +11,6 @@ SNN_Exercises
 
 -Receptive Fields Encoding
 
+-Clustering with multiple synapses SRM Model & Hebbian reinforcement learning
+
 
