@@ -6,7 +6,7 @@ package testing;
 import java.util.Random;
 
 /**
- * @author TIJUANA
+ * @author Ricardo Alfredo Macias Olvera
  *
  */
 public class Receptive_Fields_Encoding {
@@ -41,32 +41,39 @@ public class Receptive_Fields_Encoding {
 	}
 
 	public static double [][] receptive_fields(double [] input, int rf, double maxd, double[] sigma, double f_cut, double rho, int typ) {
-		System.out.println("\n---- receptive fields ----\n");
+		System.out.println("\n---- receptive fields ----");
 		double [] centers = new double[rf];
+		
 		double [] normData = NormalDataLinearEncoding.normalize(input);
 		double cent_dist = 0;		
+		//System.out.println("normData size "+ normData.length);
+		System.out.println("\n----- center -------- sigma -----");
 		for (int i =0; i < centers.length; i++) {
 			if (typ ==1) {								
 				if(i == 0)
 					cent_dist = 0.5;
 				else
-					cent_dist = (1/i);
+					cent_dist = (1/normData[i]);
 				
-				centers[i] = (i-0.5)*cent_dist;								
+				sigma[i] = 1/(1.5*(normData[i]-1));
+				
+				centers[i] = (normData[i]-0.5)*cent_dist;								
 			}else if (typ == 0) {
 				if(i == 2)
 					cent_dist = 0.5;				
 				else
-					cent_dist = (1/(i-2));
+					cent_dist = (1/(normData[i]-2));
 				
-				centers[i] = (i-1.5)*cent_dist;
+				sigma[i] = 1/(1.5*(normData[i]-2));
+				
+				centers[i] = (normData[i]-1.5)*cent_dist;
 			}
 			
 			System.out.println(centers[i] + " : "+ sigma[i]);
 		}
 		double aux=0;
 		double [][] delays = new double[normData.length][centers.length];
-		System.out.println("-----");
+		System.out.println("\n.... calculating delays.... ");
 		for (int i =0 ; i < normData.length; i ++) {
 				System.out.println("");
 				for (int k =0 ; k <  centers.length; k++) {

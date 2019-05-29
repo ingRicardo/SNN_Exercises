@@ -26,6 +26,11 @@ public class NormalDataLinearEncoding {
 		
 	}
 	
+	
+
+	
+	
+	
 	public static double [] DelaysOutput(double [] input, double rho, int maxd ) {
 		System.out.print("\ninput -> ");
 		for (int j=0; j < input.length; j++) {
@@ -57,6 +62,7 @@ public class NormalDataLinearEncoding {
 	}
 	
 	public static double [] normalize(double [] v) {
+		System.out.println("\n ...encoding data...");
 		double max = mayData(v);
 		double min = minData(v);
 		double [] normv = new double[v.length];
