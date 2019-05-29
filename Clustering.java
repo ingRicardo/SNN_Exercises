@@ -79,7 +79,7 @@ public class Clustering {
 			normDatalst.add(InputnormData);
 		}
 		
-		System.out.println("Normal data size --> "+ normDatalst.size());
+	
 		
 		System.out.println("\n ........................ training ...........................\n");
 		//training
