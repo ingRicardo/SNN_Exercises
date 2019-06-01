@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author TIJUANA
+ * @author Ricardo Alfredo Macias Olvera
  * SRM -Cluster
  * Multiple synapses
+ * Five Outputs
  */
 public class Clustering {
 
@@ -47,6 +48,10 @@ public class Clustering {
 		}
 		double f_cut=0.9;
 		int maxd=10;
+		
+		System.out.println("-- inputs --");
+		printMatix(input);
+		
 		
 		System.out.println("");
 		System.out.println("----sub-synapses delays---\n");
@@ -185,13 +190,17 @@ public class Clustering {
 				(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),(-100 + (100 - (-100)) * r.nextDouble()),
 				(-100 + (100 - (-100)) * r.nextDouble())}};
 	
-
+		
+	
+		System.out.println("\n\n-- Testing inputs --");
+		printMatix(inputTesting);
+	
 		testing(inputTesting, output, rf, maxd, sigma, f_cut, t_max, w, delta_t, tau, rho, teta, 0);
 	}
 	
 	
 	public static void testing(double[][] inputTesting,int output, int rf, int maxd, double[] sigma, double f_cut, int t_max, double[][] w, double[] d, int tau, double rho, double teta,  int type) {
-		System.out.println("\n---------------------------------------- testing ------------------------------------------");
+		System.out.println("\n\n---------------------------------------- testing ------------------------------------------");
 		HashMap<Object, Object> neuTime = null;
 		double[][] InputnormDataTest =null;
 		List<Object>  normDataTest = new ArrayList<>();
@@ -240,6 +249,20 @@ public class Clustering {
 
 			}
 
+		
+	}
+	
+	public static void printMatix(double [][] mat) {
+		for(int i=0; i< mat.length; i++) {
+			System.out.println(" ");
+			for(int j=0; j< mat[0].length; j++) {
+				System.out.print( mat[i][j] + ", ");
+				
+			}
+			
+			
+		}
+		
 		
 	}
 	
