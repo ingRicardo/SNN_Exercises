@@ -50,7 +50,7 @@ public class Clustering {
 		int maxd=10;
 		
 		System.out.println("-- inputs --");
-		printMatix(input);
+		printMatrix(input);
 		
 		
 		System.out.println("");
@@ -103,7 +103,7 @@ public class Clustering {
 					neuTime = calculate_firing(InputnormData[i], t_max, w, d, tau, rho, teta, 0);
 					System.out.println("firing Size -> " + neuTime.size());
 
-					for (int j = 0; j < InputnormData[j].length; j++) { // 8
+					for (int j = 0; j < InputnormData[0].length; j++) { // 8
 						if (InputnormData[i][j] == -1.0) {
 
 							for (int x = 0; x < w.length; x++) {// 8
@@ -193,7 +193,7 @@ public class Clustering {
 		
 	
 		System.out.println("\n\n-- Testing inputs --");
-		printMatix(inputTesting);
+		printMatrix(inputTesting);
 	
 		testing(inputTesting, output, rf, maxd, sigma, f_cut, t_max, w, delta_t, tau, rho, teta, 0);
 	}
@@ -252,7 +252,7 @@ public class Clustering {
 		
 	}
 	
-	public static void printMatix(double [][] mat) {
+	public static void printMatrix(double [][] mat) {
 		for(int i=0; i< mat.length; i++) {
 			System.out.println(" ");
 			for(int j=0; j< mat[0].length; j++) {
