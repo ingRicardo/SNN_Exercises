@@ -43,30 +43,33 @@ public class Receptive_Fields_Encoding {
 	public static double [][] receptive_fields(double [] input, int rf, double maxd, double[] sigma, double f_cut, double rho, int typ) {
 		System.out.println("\n---- receptive fields ----");
 		double [] centers = new double[rf];
-		
+		Random r = new Random();
 		double [] normData = NormalDataLinearEncoding.normalize(input);
 		double cent_dist = 0;		
 		//System.out.println("normData size "+ normData.length);
 		System.out.println("\n----- center -------- sigma -----");
+		double x =0;
 		for (int i =0; i < centers.length; i++) {
-			if (typ ==1) {								
+			if (typ ==1) {
+				x = 0 + ( (1 - (0)) * r.nextDouble()) * (1-0);
 				if(i == 0)
 					cent_dist = 0.5;
 				else
-					cent_dist = (1/normData[i]);
+					cent_dist = (1/x);
 				
-				sigma[i] = 1/(1.5*(normData[i]-1));
+				sigma[i] = 1/(1.5*(x-1));
 				
 				centers[i] = (normData[i]-0.5)*cent_dist;								
 			}else if (typ == 0) {
+				x = 0 + ( (1 - (0)) * r.nextDouble()) * (1-0);
 				if(i == 2)
 					cent_dist = 0.5;				
 				else
-					cent_dist = (1/(normData[i]-2));
+					cent_dist = (1/(x-2));
 				
-				sigma[i] = 1/(1.5*(normData[i]-2));
+				sigma[i] = 1/(1.5*(x-2));
 				
-				centers[i] = (normData[i]-1.5)*cent_dist;
+				centers[i] = (x-1.5)*cent_dist;
 			}
 			
 			System.out.println(centers[i] + " : "+ sigma[i]);
