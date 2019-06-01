@@ -266,6 +266,7 @@ public class Clustering {
 			List<Object> classes = new ArrayList<Object>();
 			for (int fin = 0; fin < normDataTest.size(); fin++) {// 3
 				InputnormDataTest = (double[][]) normDataTest.get(fin);
+			//	System.out.println("");
 				for (int i = 0; i < InputnormDataTest.length; i++) {// 10
 
 					neuTime = calculate_firing(InputnormDataTest[i], t_max, w, d, tau, rho, teta, 0);
@@ -345,7 +346,7 @@ public class Clustering {
 
 			for (int i = 0; i < w[0].length; i++) { // 5
 
-				acu = 0;
+			//	acu = 0;
 				for (int j = 0; j < input.length; j++) { // 8
 
 					if (input[j] != -1)
@@ -359,12 +360,12 @@ public class Clustering {
 						if (sai < 0)
 							sai = 0;
 
-						acu += sai;
+						output[i] += sai;
 
 					}
 
 				}
-				output[i] = acu;
+				//output[i] = acu;
 			}
 
 			max = NormalDataLinearEncoding.mayData(output);
